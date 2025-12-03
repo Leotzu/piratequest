@@ -33,6 +33,18 @@
             z-index: -1;
         }
 
+        #crab-video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0;
+            pointer-events: none;
+        }
+
         #floating-image {
             position: absolute;
             width: 400px;
@@ -145,17 +157,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom right, transparent 40%, rgba(255, 0, 0, 0.8) 45%, rgba(255, 0, 0, 0.8) 55%, transparent 60%);
-            transform: rotate(-45deg);
-            pointer-events: none;
-        }
-
-        #audio-background {
-            position: fixed;
-            top: -9999px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
+            background: linear-gradient(to bottom right, transparent 45%, rgba(255, 0, 0, 0.9) 48%, rgba(255, 0, 0, 0.9) 52%, transparent 55%);
             pointer-events: none;
         }
 
@@ -214,8 +216,9 @@
         <source src="pics/boys.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-    <video id="audio-background" autoplay loop playsinline>
-        <source src="pics/boys.mp4" type="video/mp4">
+    <video id="crab-video-background" autoplay loop playsinline muted>
+        <source src="pics/crab_vid.mp4" type="video/mp4">
+        Your browser does not support the video tag.
     </video>
     <img id="floating-image" src="pics/pirate_k.png" alt="Principal Flutist">
     <h1>Principal Flutist</h1>
@@ -227,13 +230,13 @@
 
     <script>
         const video = document.getElementById('video-background');
-        const audio = document.getElementById('audio-background');
+        const crabVideo = document.getElementById('crab-video-background');
         const muteButton = document.getElementById('mute-button');
         const crabButton = document.getElementById('crab-button');
         let isMuted = false;
         let isCrabMode = false;
 
-        // Try to play audio on load (may require user interaction in some browsers)
+        // Start both videos playing
         video.play().catch(() => {
             // If autoplay with sound fails, start muted
             video.muted = true;
@@ -241,15 +244,19 @@
             muteButton.textContent = '🔇';
         });
         
-        // Initialize hidden audio video (starts muted, will be controlled by mute button)
-        audio.muted = isMuted;
-        audio.play().catch(() => {});
+        crabVideo.play().catch(() => {});
+
+        // Sync crab video to boys video
+        video.addEventListener('timeupdate', () => {
+            if (Math.abs(crabVideo.currentTime - video.currentTime) > 0.5) {
+                crabVideo.currentTime = video.currentTime;
+            }
+        });
 
         // Toggle mute/unmute
         muteButton.addEventListener('click', () => {
             isMuted = !isMuted;
             video.muted = isMuted;
-            audio.muted = isMuted;
             muteButton.textContent = isMuted ? '🔇' : '🔊';
             
             // If unmuting, try to play (required for some browsers)
@@ -257,43 +264,29 @@
                 video.play().catch(() => {
                     // If play fails, keep muted
                     video.muted = true;
-                    audio.muted = true;
                     isMuted = true;
                     muteButton.textContent = '🔇';
-                });
-                audio.play().catch(() => {
-                    audio.muted = true;
                 });
             }
         });
 
-        // Toggle crab video
+        // Toggle crab video visibility
         crabButton.addEventListener('click', () => {
             isCrabMode = !isCrabMode;
             
             if (isCrabMode) {
-                // Switch to crab video, keep audio from boys.mp4
-                video.src = 'pics/crab_vid.mp4';
-                video.muted = true; // Mute video since we're using separate audio
-                video.load();
-                video.play().catch(() => {});
-                
-                // Play audio from boys.mp4
-                audio.muted = isMuted;
-                audio.play().catch(() => {});
-                
+                // Show crab video, hide boys video
+                crabVideo.style.opacity = '1';
+                crabVideo.style.zIndex = '-1';
+                video.style.opacity = '0';
+                video.style.zIndex = '-2';
                 crabButton.classList.remove('off');
             } else {
-                // Switch back to boys.mp4
-                video.src = 'pics/boys.mp4';
-                video.muted = isMuted;
-                video.load();
-                video.play().catch(() => {});
-                
-                // Stop the separate audio
-                audio.pause();
-                audio.currentTime = 0;
-                
+                // Show boys video, hide crab video
+                video.style.opacity = '1';
+                video.style.zIndex = '-1';
+                crabVideo.style.opacity = '0';
+                crabVideo.style.zIndex = '-2';
                 crabButton.classList.add('off');
             }
         });
