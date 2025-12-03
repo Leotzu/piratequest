@@ -70,6 +70,73 @@
         #mute-button:hover {
             background: rgba(0, 0, 0, 0.8);
         }
+
+        .nav-button {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+            color: white;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            font-family: 'Pirata One', cursive;
+            text-decoration: none;
+            display: inline-block;
+            animation: floatButton 3s ease-in-out infinite;
+        }
+
+        .nav-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        #flute-button:hover {
+            transform: translate(-50%, 0) scale(1.1);
+        }
+
+        #crew-button:hover,
+        #captain-button:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes floatButton {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes floatButtonCenter {
+            0%, 100% {
+                transform: translate(-50%, 0);
+            }
+            50% {
+                transform: translate(-50%, -10px);
+            }
+        }
+
+        #flute-button {
+            bottom: 30%;
+            left: 50%;
+            animation: floatButtonCenter 3s ease-in-out infinite;
+            animation-delay: 0s;
+        }
+
+        #crew-button {
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 0.5s;
+        }
+
+        #captain-button {
+            bottom: 20%;
+            right: 30%;
+            animation-delay: 1s;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +146,9 @@
     </video>
     <h1>Pirate Quest</h1>
     <button id="mute-button" aria-label="Toggle mute">🔊</button>
+    <a href="flute.html" class="nav-button" id="flute-button">flute</a>
+    <a href="crew.html" class="nav-button" id="crew-button">crew</a>
+    <a href="captain.html" class="nav-button" id="captain-button">captain</a>
 
     <script>
         const video = document.getElementById('video-background');

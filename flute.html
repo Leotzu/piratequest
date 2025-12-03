@@ -109,6 +109,39 @@
         #mute-button:hover {
             background: rgba(0, 0, 0, 0.8);
         }
+
+        #home-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+            color: white;
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            font-family: 'Pirata One', cursive;
+            text-decoration: none;
+            display: inline-block;
+            animation: floatButton 3s ease-in-out infinite;
+        }
+
+        #home-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        @keyframes floatButton {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -119,6 +152,7 @@
     <img id="floating-image" src="pics/pirate_k.png" alt="Principal Flutist">
     <h1>Principal Flutist</h1>
     <button id="mute-button" aria-label="Toggle mute">🔊</button>
+    <a href="index.html" id="home-button">home</a>
 
     <script>
         const video = document.getElementById('video-background');
