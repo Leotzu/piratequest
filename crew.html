@@ -23,7 +23,7 @@
             position: relative;
         }
 
-        #image-background {
+        #video-background {
             position: fixed;
             top: 0;
             left: 0;
@@ -31,6 +31,45 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
+        }
+
+        #floating-image {
+            position: absolute;
+            width: 400px;
+            max-width: 40vw;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            animation: floatBounce 20s ease-in-out infinite;
+        }
+
+        @keyframes floatBounce {
+            0% {
+                top: 10%;
+                left: 10%;
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                top: 20%;
+                left: 60%;
+                transform: translate(0, 0) rotate(5deg);
+            }
+            50% {
+                top: 60%;
+                left: 70%;
+                transform: translate(0, 0) rotate(-5deg);
+            }
+            75% {
+                top: 50%;
+                left: 20%;
+                transform: translate(0, 0) rotate(3deg);
+            }
+            100% {
+                top: 10%;
+                left: 10%;
+                transform: translate(0, 0) rotate(0deg);
+            }
         }
 
         h1 {
@@ -47,11 +86,69 @@
             z-index: 1;
             font-family: 'Pirata One', cursive;
         }
+
+        #mute-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+            color: white;
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.3s ease;
+        }
+
+        #mute-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
     </style>
 </head>
 <body>
-    <img id="image-background" src="pics/pirate_team.jpg" alt="Pirate Team Background">
+    <video id="video-background" autoplay loop playsinline>
+        <source src="pics/boys.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <img id="floating-image" src="pics/pirate_team.jpg" alt="Pirate Team">
     <h1>Crab Crew</h1>
+    <button id="mute-button" aria-label="Toggle mute">🔊</button>
+
+    <script>
+        const video = document.getElementById('video-background');
+        const muteButton = document.getElementById('mute-button');
+        let isMuted = false;
+
+        // Try to play audio on load (may require user interaction in some browsers)
+        video.play().catch(() => {
+            // If autoplay with sound fails, start muted
+            video.muted = true;
+            isMuted = true;
+            muteButton.textContent = '🔇';
+        });
+
+        // Toggle mute/unmute
+        muteButton.addEventListener('click', () => {
+            isMuted = !isMuted;
+            video.muted = isMuted;
+            muteButton.textContent = isMuted ? '🔇' : '🔊';
+            
+            // If unmuting, try to play (required for some browsers)
+            if (!isMuted) {
+                video.play().catch(() => {
+                    // If play fails, keep muted
+                    video.muted = true;
+                    isMuted = true;
+                    muteButton.textContent = '🔇';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
-
