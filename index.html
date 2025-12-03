@@ -44,14 +44,69 @@
             z-index: 1;
             font-family: 'Arial', sans-serif;
         }
+
+        #mute-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+            color: white;
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.3s ease;
+        }
+
+        #mute-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
     </style>
 </head>
 <body>
-    <video id="video-background" autoplay muted loop playsinline>
+    <video id="video-background" autoplay loop playsinline>
         <source src="pics/boys.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <h1>Pirate Quest</h1>
+    <button id="mute-button" aria-label="Toggle mute">🔊</button>
+
+    <script>
+        const video = document.getElementById('video-background');
+        const muteButton = document.getElementById('mute-button');
+        let isMuted = false;
+
+        // Try to play audio on load (may require user interaction in some browsers)
+        video.play().catch(() => {
+            // If autoplay with sound fails, start muted
+            video.muted = true;
+            isMuted = true;
+            muteButton.textContent = '🔇';
+        });
+
+        // Toggle mute/unmute
+        muteButton.addEventListener('click', () => {
+            isMuted = !isMuted;
+            video.muted = isMuted;
+            muteButton.textContent = isMuted ? '🔇' : '🔊';
+            
+            // If unmuting, try to play (required for some browsers)
+            if (!isMuted) {
+                video.play().catch(() => {
+                    // If play fails, keep muted
+                    video.muted = true;
+                    isMuted = true;
+                    muteButton.textContent = '🔇';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 
