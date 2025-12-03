@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crab Captain - Pirate Quest</title>
+    <title>Captain - Pirate Quest</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
@@ -110,6 +110,55 @@
             background: rgba(0, 0, 0, 0.8);
         }
 
+        #crab-button {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.3s ease;
+            overflow: hidden;
+        }
+
+        #crab-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        #crab-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #crab-button.off::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, transparent 40%, rgba(255, 0, 0, 0.8) 45%, rgba(255, 0, 0, 0.8) 55%, transparent 60%);
+            transform: rotate(-45deg);
+            pointer-events: none;
+        }
+
+        #audio-background {
+            position: fixed;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
         #home-button {
             position: absolute;
             background: rgba(0, 0, 0, 0.6);
@@ -165,15 +214,24 @@
         <source src="pics/boys.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+    <video id="audio-background" autoplay loop playsinline>
+        <source src="pics/boys.mp4" type="video/mp4">
+    </video>
     <img id="floating-image" src="pics/captain.jpeg" alt="Captain">
-    <h1>Crab Captain</h1>
+    <h1>Captain</h1>
     <button id="mute-button" aria-label="Toggle mute">🔊</button>
+    <button id="crab-button" class="off" aria-label="Toggle crab video">
+        <img src="pics/crab_1.png" alt="Crab">
+    </button>
     <a href="index.html" id="home-button">home</a>
 
     <script>
         const video = document.getElementById('video-background');
+        const audio = document.getElementById('audio-background');
         const muteButton = document.getElementById('mute-button');
+        const crabButton = document.getElementById('crab-button');
         let isMuted = false;
+        let isCrabMode = false;
 
         // Try to play audio on load (may require user interaction in some browsers)
         video.play().catch(() => {
@@ -182,11 +240,16 @@
             isMuted = true;
             muteButton.textContent = '🔇';
         });
+        
+        // Initialize hidden audio video (starts muted, will be controlled by mute button)
+        audio.muted = isMuted;
+        audio.play().catch(() => {});
 
         // Toggle mute/unmute
         muteButton.addEventListener('click', () => {
             isMuted = !isMuted;
             video.muted = isMuted;
+            audio.muted = isMuted;
             muteButton.textContent = isMuted ? '🔇' : '🔊';
             
             // If unmuting, try to play (required for some browsers)
@@ -194,9 +257,44 @@
                 video.play().catch(() => {
                     // If play fails, keep muted
                     video.muted = true;
+                    audio.muted = true;
                     isMuted = true;
                     muteButton.textContent = '🔇';
                 });
+                audio.play().catch(() => {
+                    audio.muted = true;
+                });
+            }
+        });
+
+        // Toggle crab video
+        crabButton.addEventListener('click', () => {
+            isCrabMode = !isCrabMode;
+            
+            if (isCrabMode) {
+                // Switch to crab video, keep audio from boys.mp4
+                video.src = 'pics/crab_vid.mp4';
+                video.muted = true; // Mute video since we're using separate audio
+                video.load();
+                video.play().catch(() => {});
+                
+                // Play audio from boys.mp4
+                audio.muted = isMuted;
+                audio.play().catch(() => {});
+                
+                crabButton.classList.remove('off');
+            } else {
+                // Switch back to boys.mp4
+                video.src = 'pics/boys.mp4';
+                video.muted = isMuted;
+                video.load();
+                video.play().catch(() => {});
+                
+                // Stop the separate audio
+                audio.pause();
+                audio.currentTime = 0;
+                
+                crabButton.classList.add('off');
             }
         });
     </script>
