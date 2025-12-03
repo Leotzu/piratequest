@@ -111,9 +111,7 @@
         }
 
         #home-button {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
+            position: absolute;
             background: rgba(0, 0, 0, 0.6);
             border: 2px solid white;
             color: white;
@@ -122,24 +120,42 @@
             border-radius: 25px;
             cursor: pointer;
             z-index: 10;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
             font-family: 'Pirata One', cursive;
             text-decoration: none;
             display: inline-block;
-            animation: floatButton 3s ease-in-out infinite;
+            animation: floatHome 23s ease-in-out infinite;
         }
 
         #home-button:hover {
             background: rgba(0, 0, 0, 0.8);
-            transform: scale(1.1);
         }
 
-        @keyframes floatButton {
-            0%, 100% {
-                transform: translateY(0);
+        @keyframes floatHome {
+            0% {
+                top: 20%;
+                left: 20%;
+                transform: rotate(0deg);
+            }
+            25% {
+                top: 30%;
+                left: 70%;
+                transform: rotate(4deg);
             }
             50% {
-                transform: translateY(-10px);
+                top: 70%;
+                left: 80%;
+                transform: rotate(-4deg);
+            }
+            75% {
+                top: 60%;
+                left: 30%;
+                transform: rotate(2deg);
+            }
+            100% {
+                top: 20%;
+                left: 20%;
+                transform: rotate(0deg);
             }
         }
     </style>

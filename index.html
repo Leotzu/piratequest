@@ -72,7 +72,7 @@
         }
 
         .nav-button {
-            position: fixed;
+            position: absolute;
             background: rgba(0, 0, 0, 0.6);
             border: 2px solid white;
             color: white;
@@ -81,61 +81,110 @@
             border-radius: 25px;
             cursor: pointer;
             z-index: 10;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
             font-family: 'Pirata One', cursive;
             text-decoration: none;
             display: inline-block;
-            animation: floatButton 3s ease-in-out infinite;
         }
 
         .nav-button:hover {
             background: rgba(0, 0, 0, 0.8);
         }
 
-        #flute-button:hover {
-            transform: translate(-50%, 0) scale(1.1);
-        }
-
-        #crew-button:hover,
-        #captain-button:hover {
-            transform: scale(1.1);
-        }
-
-        @keyframes floatButton {
-            0%, 100% {
-                transform: translateY(0);
+        @keyframes floatButton1 {
+            0% {
+                top: 15%;
+                left: 15%;
+                transform: rotate(0deg);
+            }
+            25% {
+                top: 25%;
+                left: 65%;
+                transform: rotate(3deg);
             }
             50% {
-                transform: translateY(-10px);
+                top: 65%;
+                left: 75%;
+                transform: rotate(-3deg);
+            }
+            75% {
+                top: 55%;
+                left: 25%;
+                transform: rotate(2deg);
+            }
+            100% {
+                top: 15%;
+                left: 15%;
+                transform: rotate(0deg);
             }
         }
 
-        @keyframes floatButtonCenter {
-            0%, 100% {
-                transform: translate(-50%, 0);
+        @keyframes floatButton2 {
+            0% {
+                top: 20%;
+                left: 70%;
+                transform: rotate(0deg);
+            }
+            25% {
+                top: 30%;
+                left: 20%;
+                transform: rotate(-4deg);
             }
             50% {
-                transform: translate(-50%, -10px);
+                top: 70%;
+                left: 15%;
+                transform: rotate(4deg);
+            }
+            75% {
+                top: 60%;
+                left: 80%;
+                transform: rotate(-2deg);
+            }
+            100% {
+                top: 20%;
+                left: 70%;
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes floatButton3 {
+            0% {
+                top: 25%;
+                left: 50%;
+                transform: rotate(0deg);
+            }
+            25% {
+                top: 35%;
+                left: 10%;
+                transform: rotate(5deg);
+            }
+            50% {
+                top: 75%;
+                left: 50%;
+                transform: rotate(-5deg);
+            }
+            75% {
+                top: 50%;
+                left: 90%;
+                transform: rotate(3deg);
+            }
+            100% {
+                top: 25%;
+                left: 50%;
+                transform: rotate(0deg);
             }
         }
 
         #flute-button {
-            bottom: 30%;
-            left: 50%;
-            animation: floatButtonCenter 3s ease-in-out infinite;
-            animation-delay: 0s;
+            animation: floatButton1 25s ease-in-out infinite;
         }
 
         #crew-button {
-            bottom: 20%;
-            left: 30%;
-            animation-delay: 0.5s;
+            animation: floatButton2 22s ease-in-out infinite;
         }
 
         #captain-button {
-            bottom: 20%;
-            right: 30%;
-            animation-delay: 1s;
+            animation: floatButton3 28s ease-in-out infinite;
         }
     </style>
 </head>
