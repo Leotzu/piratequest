@@ -276,10 +276,14 @@
         
         crabVideo.play().catch(() => {});
 
-        // Sync crab video to boys video
+        // Sync crab video to boys video (less frequently to avoid glitches)
+        let lastSyncTime = 0;
         video.addEventListener('timeupdate', () => {
-            if (Math.abs(crabVideo.currentTime - video.currentTime) > 0.5) {
+            const now = Date.now();
+            // Only sync every 2 seconds and if videos are more than 1 second apart
+            if (now - lastSyncTime > 2000 && Math.abs(crabVideo.currentTime - video.currentTime) > 1.0) {
                 crabVideo.currentTime = video.currentTime;
+                lastSyncTime = now;
             }
         });
 
